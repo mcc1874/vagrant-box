@@ -4,6 +4,9 @@
 - [安装Vagrant](https://www.vagrantup.com/downloads.html)
 - 安装vagrant-vbguest 启动cmd > vagrant plugin install vagrant-vbguest
     
+    
+    
+    
 ## 如何创建虚拟机（以创建centos 6 虚拟机为例）
 ```
 配置信息：
@@ -28,6 +31,9 @@ password:vagrant
 输入命令：dhclient   //初始化网络
 输入命令：ip addr    //查看ip
 ```
+
+
+
 
 ##Xshell连接虚拟机
 ```
@@ -78,6 +84,43 @@ EOF1
 关机
 输入命令：shutdown -h now
 ```
+
+
+
+
+##生成盒子
+```bat
+@echo off
+set virt_name=common_dev_1 rem 虚拟机名称
+set box_name=common_dev_1  rem 盒子名称
+
+echo -------- 正在生成，请耐心等待 ---------
+vagrant package --base %virt_name% --output %cd%\\%box_name%.box
+pause
+```bat
+
+
+
+
+##安装盒子
+```bat
+@echo off
+echo -------- 注意，将删除已有的盒子 ---------
+pause
+for /f %%c in ('dir /b *.box') do (
+    vagrant box remove %%c
+    vagrant box add --name %%c %cd%\\%%c
+)
+pause
+```bat
+
+
+
+
+
+
+
+
 
 
 
