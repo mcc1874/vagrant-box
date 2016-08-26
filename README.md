@@ -3,11 +3,12 @@
 - [安装VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [安装Vagrant](https://www.vagrantup.com/downloads.html)
 - 安装vagrant-vbguest 启动cmd > vagrant plugin install vagrant-vbguest
+- [下载centos 6.8](http://mirrors.163.com/centos/6.8/isos/i386/CentOS-6.8-i386-minimal.iso)    
+    
+
     
     
-    
-    
-## 如何创建虚拟机（以创建centos 6 虚拟机为例）
+## 如何创建虚拟机（以创建centos 6.x 虚拟机为例）
 ```
 配置信息：
     名称：common_dev_1
