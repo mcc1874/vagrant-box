@@ -166,3 +166,12 @@ end
 ```
 
 
+
+##连接新的盒子虚拟机
+```
+ip：192.168.56.10
+login：root
+passwd：vagrant
+本机同步目录：d:/wwwroot
+服务器同步目录：/home/wwwroot
+```
