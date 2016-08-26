@@ -137,7 +137,7 @@ pause
 ##启动盒子.bat
 ```bat
 @echo off
-set sync_dir=d://wwwroot
+set sync_dir=d://www
 set vagrantfile_name=Vagrantfile
 set vagrantfile_file=%cd%\\%vagrantfile_name%
 if exist %vagrantfile_file% (
@@ -160,7 +160,7 @@ config.vm.box = "common_dev_1"
 config.vm.network :private_network, ip: "192.168.56.10"                 #私有网络，只有主机可以访问虚拟机
 #config.vm.network :public_network, ip: "192.168.1.10"                  #公有网络，局域网成员可访问
 #config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"   #桥接网卡
-config.vm.synced_folder "d:/wwwroot", "/home/wwwroot"                   #同步本地wwwroot至服务器wwwroot目录
+config.vm.synced_folder "d:/www", "/home/www"           #同步本地www至服务器www目录
 end
 ```
 
@@ -171,6 +171,4 @@ end
 ip：192.168.56.10
 login：root
 passwd：vagrant
-本机同步目录：d:/wwwroot
-服务器同步目录：/home/wwwroot
 ```
