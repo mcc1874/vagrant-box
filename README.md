@@ -41,7 +41,7 @@ password:vagrant
 后续操作全部在xshell完成
 
 安装必需的包
-输入命令：yum -y install kernel kernel-devel curl
+输入命令：yum -y install kernel kernel-devel binutils curl
 
 关闭iptables
 输入命令：chkconfig iptables off && chkconfig ip6tables off
@@ -88,40 +88,71 @@ EOF1
 
 
 
-##生成盒子
+##从虚拟机中导出盒子.bat
 ```bat
 @echo off
-set virt_name=common_dev_1 rem 虚拟机名称
-set box_name=common_dev_1  rem 盒子名称
+set "default_box_name=common_dev_1"     rem 默认盒子名称
+set /p "box_name=请输入要导出的盒子名称（默认common_dev_1）:"
+
+if not defined box_name (
+    set "box_name=%default_box_name%"
+)
 
 echo -------- 正在生成，请耐心等待 ---------
-vagrant package --base %virt_name% --output %cd%\\%box_name%.box
+vagrant package --base %box_name% --output %cd%\\%box_name%.box
+echo %cd%\\%box_name%.box
+echo.
 pause
 ```
 
 
 
 
-##安装盒子
+##安装盒子.bat
 ```bat
 @echo off
-echo -------- 注意，将删除已有的盒子 ---------
-pause
-for /f %%c in ('dir /b *.box') do (
-    vagrant box remove %%c
-    vagrant box add --name %%c %cd%\\%%c
+set box_name=common_dev_1
+set box_file=%cd%\\%box_name%.box
+if exist %box_file% (
+    vagrant box remove %box_name% 2>nul
+    vagrant box add --name %box_name% %box_file%
+    echo 初始化完成
+) else (
+    echo 找不到文件：%box_file%
 )
 pause
 ```
 
 
 
+##启动盒子.bat
+```bat
+@echo off
+set sync_dir=d://wwwroot
+set vagrantfile_name=Vagrantfile
+set vagrantfile_file=%cd%\\%vagrantfile_name%
+if exist %vagrantfile_file% (
+    md "%sync_dir%" 2>nul
+    vagrant halt 2>nul
+    vagrant up
+) else (
+    echo 找不到文件：%vagrantfile_file%
+)
+pause
+```
 
 
 
-
-
-
-
+##Vagrantfile
+```
+Vagrant.configure(2) do |config| 
+config.vm.box = "common_dev_1"
+#config.vm.network :forwarded_port, guest: 80, host: 8080               #端口转发
+config.vm.network :private_network, ip: "192.168.56.10"                 #私有网络，只有主机可以访问虚拟机
+#config.vm.network :public_network, ip: "192.168.1.10"                  #公有网络，局域网成员可访问
+#config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"   #桥接网卡
+config.vm.synced_folder "d:/wwwroot", "/home/wwwroot"                   #同步本地wwwroot至服务器wwwroot目录
+end
+```
 
 
