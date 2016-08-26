@@ -78,13 +78,17 @@ NM_CONTROLLED=no
 BOOTPROTO=dhcp
 EOF1
 
+安装lnmp（可选）
+输入命令：yum -y install screen && screen -S lnmp
+输入命令：yum -y install wget && wget -c http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz && tar zxf lnmp1.3-full.tar.gz && cd lnmp1.3-full && ./install.sh lnmp
+
+
 删除日志
 输入命令：rm -f /etc/udev/rules.d/70-persistent-net.rules && yum clean all && rm -rf /tmp/* && rm -f /var/log/wtmp /var/log/btmp && history -c
 
 关机
 输入命令：shutdown -h now
 ```
-
 
 
 
