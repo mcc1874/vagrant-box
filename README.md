@@ -1,8 +1,8 @@
 ## 前置条件
-- [安装xshell](http://www.netsarang.com/download/down_xsh.html)
 - [安装VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 - [安装Vagrant](https://www.vagrantup.com/downloads.html)
 - 安装vagrant-vbguest 启动cmd > vagrant plugin install vagrant-vbguest
+- [安装xshell](http://www.netsarang.com/download/down_xsh.html)
 - [下载centos 6.8](http://mirrors.163.com/centos/6.8/isos/i386/CentOS-6.8-i386-minimal.iso)    
     
 
