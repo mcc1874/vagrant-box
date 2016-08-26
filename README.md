@@ -82,7 +82,12 @@ EOF1
 安装lnmp（可选）
 输入命令：yum -y install screen && screen -S lnmp
 输入命令：yum -y install wget && wget -c http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz && tar zxf lnmp1.3-full.tar.gz && cd lnmp1.3-full && ./install.sh lnmp
-
+输入命令：./addons.sh install redis 
+输入命令：vi /usr/local/nginx/conf/nginx.conf
+```
+"sendfile on" 修改为 "sendfile off"
+防止静态文件缓存
+``` 
 
 删除日志
 输入命令：rm -f /etc/udev/rules.d/70-persistent-net.rules && yum clean all && rm -rf /tmp/* && rm -f /var/log/wtmp /var/log/btmp && history -c
