@@ -1,9 +1,15 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+########################################
+# set hosts
+# 192.168.56.10 local.www.moqiuchen.com
+########################################
+
+vhost_path="/usr/local/nginx/conf/vhost/"
 domain="local.www.moqiuchen.com"
-root_path="/home/www/blog/Codeigniter"
+root_path="/home/www/blog/Codeigniter/"
 
-cat << EOF > ${domain}.conf
+cat << EOF > ${vhost_path}/${domain}.conf
 server
 {
     listen 80;
@@ -29,10 +35,9 @@ server
     {
         deny all;
     }
-    
+
     access_log  /home/wwwlogs/${domain}.log;
 }
 EOF
 
 service nginx restart
-                                                                                               

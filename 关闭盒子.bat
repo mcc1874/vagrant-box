@@ -5,6 +5,6 @@ set vagrantfile_file=%cd%\\%vagrantfile_name%
 if exist %vagrantfile_file% (
     vagrant halt
 ) else (
-    echo 找不到文件：%vagrantfile_file%
+    echo not found:%vagrantfile_file%
 )
 pause

@@ -5,8 +5,8 @@ if exist %box_file% (
     vagrant destroy 2>nul
     vagrant box remove %box_name% 2>nul
     vagrant box add --name %box_name% %box_file%
-    echo 初始化完成
+    echo initialization
 ) else (
-    echo 找不到文件：%box_file%
+    echo not found:%box_file%
 )
 pause
