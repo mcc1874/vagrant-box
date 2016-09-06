@@ -100,14 +100,14 @@ EOF1
 ##从虚拟机中导出盒子.bat
 ```bat
 @echo off
-set "default_box_name=common_dev_1"     rem 默认盒子名称
-set /p "box_name=请输入要导出的盒子名称（默认common_dev_1）:"
+set "default_box_name=common_dev_1"
+set /p "box_name=please input box name:(default:common_dev_1)"
 
 if not defined box_name (
     set "box_name=%default_box_name%"
 )
 
-echo -------- 正在生成，请耐心等待 ---------
+echo -------- please wait ---------
 vagrant package --base %box_name% --output %cd%\\%box_name%.box
 echo %cd%\\%box_name%.box
 echo.
@@ -123,11 +123,12 @@ pause
 set box_name=common_dev_1
 set box_file=%cd%\\%box_name%.box
 if exist %box_file% (
+    vagrant destroy 2>nul
     vagrant box remove %box_name% 2>nul
     vagrant box add --name %box_name% %box_file%
-    echo 初始化完成
+    echo initialization
 ) else (
-    echo 找不到文件：%box_file%
+    echo not found:%box_file%
 )
 pause
 ```
@@ -143,24 +144,52 @@ set vagrantfile_file=%cd%\\%vagrantfile_name%
 if exist %vagrantfile_file% (
     md "%sync_dir%" 2>nul
     vagrant halt 2>nul
-    vagrant up
+    vagrant up --provision
 ) else (
-    echo 找不到文件：%vagrantfile_file%
+    echo not found:%vagrantfile_file%
 )
 pause
 ```
 
 
 
+##关闭盒子.bat
+```bat
+@echo off
+set sync_dir=d://www
+set vagrantfile_name=Vagrantfile
+set vagrantfile_file=%cd%\\%vagrantfile_name%
+if exist %vagrantfile_file% (
+    vagrant halt
+) else (
+    echo not found:%vagrantfile_file%
+)
+pause
+```
+
 ##Vagrantfile
 ```
 Vagrant.configure(2) do |config| 
+
 config.vm.box = "common_dev_1"
-#config.vm.network :forwarded_port, guest: 80, host: 8080               #端口转发
-config.vm.network :private_network, ip: "192.168.56.10"                 #私有网络，只有主机可以访问虚拟机
-#config.vm.network :public_network, ip: "192.168.1.10"                  #公有网络，局域网成员可访问
-#config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"   #桥接网卡
-config.vm.synced_folder "d:/www", "/home/www"           #同步本地www至服务器www目录
+
+#启动时执行该脚本
+config.vm.provision :shell, path: "bootstrap.sh"
+
+#端口转发
+#config.vm.network :forwarded_port, guest: 80, host: 8080
+
+#私有网络，只有主机可以访问虚拟机
+config.vm.network :private_network, ip: "192.168.56.10"
+
+#公有网络，局域网成员可访问
+#config.vm.network :public_network, ip: "192.168.1.10"
+
+#桥接网卡
+#config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"
+
+#同步本地www至服务器www目录
+config.vm.synced_folder "d:/www", "/home/www"
 end
 ```
 
