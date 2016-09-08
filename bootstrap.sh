@@ -9,17 +9,23 @@ vhost_path="/usr/local/nginx/conf/vhost/"
 domain="local.www.moqiuchen.com"
 root_path="/home/www/blog/Codeigniter/"
 
-cat << EOF > ${vhost_path}/${domain}.conf
+cat > ${vhost_path}/${domain}.conf <<EOF
 server
 {
     listen 80;
     server_name ${domain};
     index index.html index.htm index.php default.html default.htm default.php;
-    root  ${root_path};
+    root ${root_path};
 
     include other.conf;
     #error_page   404   /404.html;
     include enable-php.conf;
+
+    if (!-e \$request_filename)
+    {
+        rewrite ^/(.*)$ /index.php?/\$1 last;
+        break;
+    }
 
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
     {
