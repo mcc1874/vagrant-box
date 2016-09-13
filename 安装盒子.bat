@@ -5,7 +5,7 @@ if exist %box_file% (
     vagrant destroy 2>nul
     vagrant box remove %box_name% 2>nul
     vagrant box add --name %box_name% %box_file%
-    echo initialization
+    echo success
 ) else (
     echo not found:%box_file%
 )

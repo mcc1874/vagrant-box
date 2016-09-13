@@ -4,10 +4,10 @@
 # set windos hosts
 # 192.168.56.10 local.www.moqiuchen.com
 ########################################
-
 vhost_path="/usr/local/nginx/conf/vhost/"
+
 domain="local.www.moqiuchen.com"
-root_path="/home/www/blog/"
+root_path="/home/www/"
 cat > ${vhost_path}/${domain}.conf <<EOF
 server
 {
@@ -17,7 +17,7 @@ server
     root ${root_path};
 
     #error_page   404   /404.html;
-    
+
     include typecho.conf; #重写index.php
     include enable-php.conf;
     #include enable-php-pathinfo.conf; #开启phthinfo

@@ -110,7 +110,6 @@ if not defined box_name (
 echo -------- please wait ---------
 vagrant package --base %box_name% --output %cd%\\%box_name%.box
 echo %cd%\\%box_name%.box
-echo.
 pause
 ```
 
@@ -126,7 +125,7 @@ if exist %box_file% (
     vagrant destroy 2>nul
     vagrant box remove %box_name% 2>nul
     vagrant box add --name %box_name% %box_file%
-    echo initialization
+    echo success
 ) else (
     echo not found:%box_file%
 )
@@ -138,11 +137,9 @@ pause
 ##启动盒子.bat
 ```bat
 @echo off
-set sync_dir=d://www
 set vagrantfile_name=Vagrantfile
 set vagrantfile_file=%cd%\\%vagrantfile_name%
 if exist %vagrantfile_file% (
-    md "%sync_dir%" 2>nul
     vagrant halt 2>nul
     vagrant up --provision
 ) else (
@@ -156,7 +153,6 @@ pause
 ##关闭盒子.bat
 ```bat
 @echo off
-set sync_dir=d://www
 set vagrantfile_name=Vagrantfile
 set vagrantfile_file=%cd%\\%vagrantfile_name%
 if exist %vagrantfile_file% (
@@ -189,7 +185,7 @@ config.vm.network :private_network, ip: "192.168.56.10"
 #config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"
 
 #同步本地www至服务器www目录
-config.vm.synced_folder "d:/data/www", "/home/www"
+config.vm.synced_folder "./www", "/home/www"
 end
 ```
 
