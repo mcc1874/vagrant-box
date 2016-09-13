@@ -9,5 +9,4 @@ if not defined box_name (
 echo -------- please wait ---------
 vagrant package --base %box_name% --output %cd%\\%box_name%.box
 echo %cd%\\%box_name%.box
-echo.
 pause

@@ -7,7 +7,7 @@
 
 vhost_path="/usr/local/nginx/conf/vhost/"
 domain="local.www.moqiuchen.com"
-root_path="/home/www/blog/Codeigniter/"
+root_path="/home/www/blog/"
 
 cat > ${vhost_path}/${domain}.conf <<EOF
 server

@@ -189,7 +189,7 @@ config.vm.network :private_network, ip: "192.168.56.10"
 #config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"
 
 #同步本地www至服务器www目录
-config.vm.synced_folder "d:/www", "/home/www"
+config.vm.synced_folder "d:/data/www", "/home/www"
 end
 ```
 
