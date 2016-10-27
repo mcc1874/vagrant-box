@@ -1,5 +1,5 @@
 ## 前置条件
-- [安装VirtualBox](http://download.virtualbox.org/virtualbox/4.3.12/VirtualBox-4.3.12-93733-Win.exe) 4.3.12之后的版本有启动bug
+- [安装VirtualBox](http://download.virtualbox.org/virtualbox/5.1.8/VirtualBox-5.1.8-111374-Win.exe)
 - [安装Vagrant](https://www.vagrantup.com/downloads.html)
 - 安装vagrant-vbguest 启动cmd > vagrant plugin install vagrant-vbguest
 - [安装xshell](http://www.netsarang.com/download/down_xsh.html)
@@ -14,8 +14,8 @@
     名称：common_dev_1
     类型：Linux
     版本：Red Hat 64bit
-    内存：1100MB
-    硬盘: 20GB固定大小
+    内存：2048MB
+    硬盘: 30GB动态大小
     系统：去掉软驱勾选
     声音: 去掉声音勾选
     USB设备: 去掉USB设备勾选
@@ -42,7 +42,8 @@ password:vagrant
 后续操作全部在xshell完成
 
 安装必需的包
-输入命令：yum -y install kernel kernel-devel binutils curl httpd-tools
+输入命令：yum -y install gcc kernel-devel binutils curl httpd-tools wget screen
+
 
 关闭iptables
 输入命令：chkconfig iptables off && chkconfig ip6tables off
@@ -79,120 +80,44 @@ NM_CONTROLLED=no
 BOOTPROTO=dhcp
 EOF
 
+
+安装 VBoxGuestAdditions（可选）
+安装了 VBoxGuestAdditions 后才可以使用共享目录的功能。到 VirtualBox 目录上传 VBoxGuestAdditions.iso 文件上传到 vagrant 用户目录。然后执行下面的命令:
+
+输入命令：cd /tmp
+输入命令：sudo mount -o loop /home/vagrant/VBoxGuestAdditions_{VBOX_VERSION}.iso /mnt
+输入命令：sudo /mnt/VBoxLinuxAdditions.run && sudo umount /mnt && rm -rf /home/vagrant/VBoxGuestAdditions_*.iso
+注：{VBOX_VERSION} 表示下载的版本号
+
 安装lnmp（可选）
 输入命令：yum -y install screen && screen -S lnmp
-输入命令：yum -y install wget && wget -c http://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz && tar zxf lnmp1.3-full.tar.gz && cd lnmp1.3-full && ./install.sh lnmp
+输入命令：yum -y install wget && wget -c ftp://soft.vpser.net/lnmp/lnmp1.3-full.tar.gz && tar zxf lnmp1.3-full.tar.gz && cd lnmp1.3-full && ./install.sh lnmp
 输入命令：./addons.sh install redis 
 输入命令：./addons.sh install memcached
 输入命令：./addons.sh install imagemagick
 输入命令：sed -i 's/sendfile   on/sendfile off/g' /usr/local/nginx/conf/nginx.conf
 
-删除日志
-输入命令：rm -f /etc/udev/rules.d/70-persistent-net.rules && yum clean all && rm -rf /tmp/* && rm -f /var/log/wtmp /var/log/btmp && history -c
+开启mysql远程（可选）
+输入命令：mysql -u root -p
+mysql> use mysql; 
+mysql> update user set host = '%' where user = 'root';
+mysql> flush privileges;
+
+删除网络规则
+输入命令：rm -f /etc/udev/rules.d/70-persistent-net.rules
+
+清理lnmp.zip（可选）
+cd ~ && rm -rf lnmp*
+
+清理体积
+yum -y erase gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts && yum -y clean all && dd if=/dev/zero of=/EMPTY bs=1M && rm -rf /EMPTY && rm -rf /tmp/* && rm -rf /var/log/wtmp /var/log/btmp && history -c
+
 
 关机
 输入命令：shutdown -h now
 ```
 
 
-
-##从虚拟机中导出盒子.bat
-```bat
-@echo off
-set "default_box_name=common_dev_1"
-set /p "box_name=please input box name:(default:common_dev_1)"
-
-if not defined box_name (
-    set "box_name=%default_box_name%"
-)
-
-echo -------- please wait ---------
-vagrant package --base %box_name% --output %cd%\\%box_name%.box
-echo %cd%\\%box_name%.box
-pause
-```
-
-
-
-
-##安装盒子.bat
-```bat
-@echo off
-set box_name=common_dev_1
-set box_file=%cd%\\%box_name%.box
-if exist %box_file% (
-    vagrant destroy 2>nul
-    vagrant box remove %box_name% 2>nul
-    vagrant box add --name %box_name% %box_file%
-    echo success
-) else (
-    echo not found:%box_file%
-)
-pause
-```
-
-
-
-##启动盒子.bat
-```bat
-@echo off
-set vagrantfile_name=Vagrantfile
-set vagrantfile_file=%cd%\\%vagrantfile_name%
-if exist %vagrantfile_file% (
-    vagrant halt 2>nul
-    vagrant up --provision
-) else (
-    echo not found:%vagrantfile_file%
-)
-pause
-```
-
-
-
-##关闭盒子.bat
-```bat
-@echo off
-set vagrantfile_name=Vagrantfile
-set vagrantfile_file=%cd%\\%vagrantfile_name%
-if exist %vagrantfile_file% (
-    vagrant halt
-) else (
-    echo not found:%vagrantfile_file%
-)
-pause
-```
-
-##Vagrantfile
-```
-Vagrant.configure(2) do |config| 
-
-config.vm.box = "common_dev_1"
-
-#启动时执行该脚本
-config.vm.provision :shell, path: "bootstrap.sh"
-
-#端口转发
-#config.vm.network :forwarded_port, guest: 80, host: 8080
-
-#私有网络，只有主机可以访问虚拟机
-config.vm.network :private_network, ip: "192.168.56.10"
-
-#公有网络，局域网成员可访问
-#config.vm.network :public_network, ip: "192.168.1.10"
-
-#桥接网卡
-#config.vm.network :public_network, :bridge => "en1: Wi-Fi (AirPort)"
-
-#同步本地www至服务器www目录
-config.vm.synced_folder "./www", "/home/www"
-end
-```
-
-
-
-##连接新的盒子虚拟机
-```
-ip：192.168.56.10
-login：root
-passwd：vagrant
-```
+制作vagrant base box之后启动总是出现这样的警告
+因为用ssh连接过的box其权限会变成660？
+sudo -u vagrant chmod 600 /home/vagrant/.ssh/authorized_keys

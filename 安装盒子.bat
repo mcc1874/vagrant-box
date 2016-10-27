@@ -1,5 +1,5 @@
 @echo off
-set box_name=common_dev_1
+set box_name=common_php
 set box_file=%cd%\\%box_name%.box
 if exist %box_file% (
     vagrant destroy 2>nul

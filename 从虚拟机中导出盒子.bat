@@ -1,6 +1,6 @@
 @echo off
-set "default_box_name=common_dev_1"
-set /p "box_name=please input box name:(default:common_dev_1)"
+set "default_box_name=common_php"
+set /p "box_name=please input box name:(default:common_php)"
 
 if not defined box_name (
     set "box_name=%default_box_name%"
