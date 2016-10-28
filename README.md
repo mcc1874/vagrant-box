@@ -52,7 +52,7 @@ password:vagrant
 输入命令：sed -i -e 's/^SELINUX=.*/SELINUX=permissive/' /etc/selinux/config
 
 SSH免登录证书
-输入命令：useradd vagrant && mkdir -m 0700 -p /home/vagrant/.ssh && curl https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub >> /home/vagrant/.ssh/authorized_keys && chmod 600 /home/vagrant/.ssh/authorized_keys && chown -R vagrant:vagrant /home/vagrant/.ssh
+输入命令：useradd vagrant && mkdir -m 0700 -p /home/vagrant/.ssh && wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/vagrant/.ssh/authorized_keys && chmod 600 /home/vagrant/.ssh/authorized_keys && chown -R vagrant:vagrant /home/vagrant/.ssh
 输入命令：sed -i 's/^\(Defaults.*requiretty\)/#\1/' /etc/sudoers && echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 配置网卡
@@ -107,17 +107,34 @@ mysql> flush privileges;
 输入命令：rm -f /etc/udev/rules.d/70-persistent-net.rules
 
 清理lnmp.zip（可选）
-cd ~ && rm -rf lnmp*
+输入命令：cd ~ && rm -rf lnmp*
 
 清理体积
-yum -y erase gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts && yum -y clean all && dd if=/dev/zero of=/EMPTY bs=1M && rm -rf /EMPTY && rm -rf /tmp/* && rm -rf /var/log/wtmp /var/log/btmp && history -c
-
+输入命令：yum -y erase gtk2 libX11 hicolor-icon-theme avahi freetype bitstream-vera-fonts && yum -y clean all && dd if=/dev/zero of=/EMPTY bs=1M
+输入命令：rm -rf /EMPTY && rm -rf /tmp/* && rm -rf /var/log/wtmp /var/log/btmp && history -c
 
 关机
 输入命令：shutdown -h now
 ```
 
 
-制作vagrant base box之后启动总是出现这样的警告
-因为用ssh连接过的box其权限会变成660？
-sudo -u vagrant chmod 600 /home/vagrant/.ssh/authorized_keys
+##FAQ：
+###theme x64 bug
+```
+替换原生dll
+```
+
+###ssh权限错误
+```
+检查authorized_keys 所有人 权限600 大小409
+注：和vagrant连接过的authorized_keys大小为389　原始大小为409
+ll -a /home/vagrant/.ssh
+
+先用修复chmod 600 /home/vagrant/.ssh/authorized_keys
+
+修复不行，重新生成服务端authorized_keys
+输入命令：mkdir -m 0700 -p /home/vagrant/.ssh && wget https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant.pub -O /home/vagrant/.ssh/authorized_keys && chmod 600 /home/vagrant/.ssh/authorized_keys && chown -R vagrant:vagrant /home/vagrant/.ssh
+
+检查本机vagrant ssh-config IdentityFile 路径的文件内容是否正确　53s=结尾
+正确私钥：https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant
+```
