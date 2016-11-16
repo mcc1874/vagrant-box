@@ -1,0 +1,4 @@
+.vagrant
+share/www/*
+share/wwwlogs/*
+common_php.box
