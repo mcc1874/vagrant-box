@@ -1,7 +1,9 @@
 ﻿#!/usr/bin/env bash
 
 # php.ini
-sed -i 's/display_errors = Off/display_errors = On/g' /usr/local/php/etc/php.ini
+# sed -i 's/display_errors = Off/display_errors = On/g' /usr/local/php/etc/php.ini
+sed -i 's/^disable_functions =.*$/disable_functions = /g' /usr/local/php/etc/php.ini
+sed -i 's/^error_reporting =.*$/error_reporting = E_ALL \& ~E_NOTICE/g' /usr/local/php/etc/php.ini
 # nginx.conf
 sed -i 's/sendfile on/sendfile off/g' /usr/local/nginx/conf/nginx.conf
 
@@ -23,8 +25,8 @@ server
     #error_page   404   /404.html;
 
     include typecho.conf; #重写index.php
-    include enable-php.conf;
-    #include enable-php-pathinfo.conf; #开启pathinfo
+    # include enable-php.conf;
+    include enable-php-pathinfo.conf; #开启pathinfo
 
     location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$
     {
@@ -40,7 +42,7 @@ server
     {
         deny all;
     }
-    access_log  $wwwlogs_path/$file_dir.log;
+    access_log  $wwwlogs_path/$domain.log;
 }
 EOF
 

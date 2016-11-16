@@ -1,4 +1,6 @@
-.vagrant
-share/www/*
-share/wwwlogs/*
-common_php.box
+/.vagrant
+/share/www/*
+/share/wwwlogs/*
+/common_php.box
+/bootstrap.sh
+/hosts.bat
