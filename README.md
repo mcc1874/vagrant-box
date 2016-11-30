@@ -138,3 +138,9 @@ ll -a /home/vagrant/.ssh
 检查本机vagrant ssh-config IdentityFile 路径的文件内容是否正确　53s=结尾
 正确私钥：https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant
 ```
+
+###VirtualBox 启动报错
+```
+原因：安装其他软件导致
+解决：删除C:\Users\Administrator\.VirtualBox，重装
+```
