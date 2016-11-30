@@ -119,6 +119,13 @@ mysql> flush privileges;
 
 
 ##FAQ：
+###连接vagrant
+```
+win cmd: vagrant ssh
+win xshell: 127.0.0.1:2222 vagrant vagrant
+```
+
+
 ###theme x64 bug
 ```
 替换原生dll
