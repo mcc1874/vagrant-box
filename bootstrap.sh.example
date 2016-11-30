@@ -42,7 +42,7 @@ server
     {
         deny all;
     }
-    access_log  $wwwlogs_path/$domain.log;
+    access_log  $wwwlogs_path/$file_dir.log;
 }
 EOF
 
