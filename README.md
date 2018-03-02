@@ -14,7 +14,7 @@
     名称：common_dev_1
     类型：Linux
     版本：Red Hat 64bit
-    内存：2048MB
+    内存：1048MB
     硬盘: 30GB动态大小
     系统：去掉软驱勾选
     声音: 去掉声音勾选
@@ -22,7 +22,6 @@
     网络:
         网卡1, 网络地址转换(NAT)
         网卡2, 仅主机(Host-Only)适配器
-        网卡3, 桥接网卡
     设置root密码：vagrant
 
 登录：
@@ -66,14 +65,6 @@ EOF
 
 输入命令：cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth1
 DEVICE=eth1
-TYPE=Ethernet
-ONBOOT=yes
-NM_CONTROLLED=no
-BOOTPROTO=dhcp
-EOF
-
-输入命令：cat << EOF > /etc/sysconfig/network-scripts/ifcfg-eth2
-DEVICE=eth2
 TYPE=Ethernet
 ONBOOT=yes
 NM_CONTROLLED=no
